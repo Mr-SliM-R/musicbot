@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbotdiscord
+  namespace: bots
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatbotdiscord
+  template:
+    metadata:
+      labels:
+        app: chatbotdiscord
+    spec:
+      containers:
+        - name: bot
+          image: chatbotdiscord:latest   # if using Docker Desktop local image
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: FFMPEG_BIN
+              value: "ffmpeg"
+          envFrom:
+            - secretRef:
+                name: chatbotdiscord
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
